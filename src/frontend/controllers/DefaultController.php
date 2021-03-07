@@ -16,6 +16,12 @@ class DefaultController extends Controller
     public function beforeAction($action)
     {
         if (parent::beforeAction($action)) {
+
+            // when no password is given, we do not need protection!
+            if (empty($this->module->password)) {
+                return true;
+            }
+            
             if ($action->id == 'login' || $action->id == 'feed') {
                 return true;
             }

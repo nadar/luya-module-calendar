@@ -20,14 +20,14 @@ Add the modules to your config file:
 
 ```php
 'modules' => [
-  'calendarfrontend' => [
-    'class' => 'nadar\calendar\frontend\Module',
-    'password' => 'mysecretcalendar',
-    'calendarLocation' => 'Somewhere over the Rainbow',
-  ],
-  'calendaradmin' => [
-    'class' => 'nadar\calendar\admin\Module'
-  ],
+    'calendarfrontend' => [
+        'class' => 'nadar\calendar\frontend\Module',
+        'password' => 'mysecretcalendar',
+        'calendarLocation' => 'Somewhere over the Rainbow',
+    ],
+    'calendaradmin' => [
+        'class' => 'nadar\calendar\admin\Module'
+    ],
 ]
 ```
 
