@@ -14,6 +14,9 @@ use yii\base\InvalidConfigException;
  */
 class Module extends \luya\base\Module
 {
+    /**
+     * @var string If a password is given, the calendar is protected and the password must be entered to 
+     */
     public $password;
 
     /**
@@ -25,5 +28,6 @@ class Module extends \luya\base\Module
         'calendarfrontend/year/<year:\d+>' => 'calendarfrontend/default/index',
         'calendarfrontend/date/<from:\d+>/<to:\d+>' => 'calendarfrontend/default/detail',
         'calendarfrontend/feed' => 'calendarfrontend/default/feed',
+        'calendarfrontend/create' => 'calendarfrontend/default/create',
     ];
 }
