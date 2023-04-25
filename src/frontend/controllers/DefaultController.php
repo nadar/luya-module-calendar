@@ -107,7 +107,7 @@ class DefaultController extends Controller
         for ($i = 1 ; $i <= 12; $i++) {
             $time = strtotime($year."-".$i."-01");
             $first = strtotime('first hour', $time);
-            $last = strtotime('last day of this month', $time);
+            $last = strtotime('first day of next month', $time) - 1;
 
             $items = [];
             $persons = [];
