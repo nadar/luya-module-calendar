@@ -21,7 +21,7 @@ class DefaultController extends Controller
             if (empty($this->module->password)) {
                 return true;
             }
-            
+
             if ($action->id == 'login' || $action->id == 'feed') {
                 return true;
             }
@@ -94,18 +94,18 @@ class DefaultController extends Controller
         $lastDay = strtotime("last day of December {$year}");
 
         $dates = Item::find()
-        ->with(['person'])
-        ->andWHere([
-            'and',
-            ['>=', 'start_date', $firstDay],
-            ['<=', 'end_date', $lastDay],
-        ])
-        ->all();
+            ->with(['person'])
+            ->andWHere([
+                'and',
+                ['>=', 'start_date', $firstDay],
+                ['<=', 'end_date', $lastDay],
+            ])
+            ->all();
 
         $months = [];
 
-        for ($i = 1 ; $i <= 12; $i++) {
-            $time = strtotime($year."-".$i."-01");
+        for ($i = 1; $i <= 12; $i++) {
+            $time = strtotime($year . "-" . $i . "-01");
             $first = strtotime('first hour', $time);
             $last = strtotime('first day of next month', $time) - 1;
 
@@ -147,26 +147,40 @@ class DefaultController extends Controller
     {
         $dates = Item::find()
             ->with(['person'])
-            ->andWHere([
-                'or',  
+            ->andWhere([
+                'or',
                 ['between', 'start_date', $from, $to],
                 ['between', 'end_date', $from, $to]
             ])
             ->all();
 
-        $i = 0;
         $days = [];
-        for ($i = 1; $i <= date("t", $to); $i++) {
-            $dayTimestamp = strtotime($i . '-'.date("n", $from).'-'.date("Y", $from));
 
-            $yearDay = strftime('%j', $dayTimestamp);
-            $endOfDay = strtotime('midnight', $dayTimestamp);
+        $month = date("n", $from); // Numeric representation of a month, without leading zeros (1-12)
+        $year = date("Y", $from);  // Four-digit year
+        $numberOfDays = date("t", $to); // Number of days in the month of the 'to' timestamp
+
+        for ($i = 1; $i <= $numberOfDays; $i++) {
+            // Create a timestamp for the current day
+            $dayString = sprintf('%02d-%02d-%04d', $i, $month, $year);
+            $dayTimestamp = strtotime($dayString);
+
+            // Calculate the day of the year (1-366)
+            $yearDay = (int)date('z', $dayTimestamp) + 1; // 'z' is 0-365, so add 1
+
+            // Initialize the day's data
             $days[$i] = [
                 'items' => [],
                 'timestamp' => $dayTimestamp,
             ];
+
             foreach ($dates as $d) {
-                if ((int) strftime("%j", $d->start_date) <= $yearDay && (int) strftime("%j", $d->end_date)  >= $yearDay) {
+                // Calculate the day of the year for the item's start and end dates
+                $dStartYearDay = (int)date('z', $d->start_date) + 1;
+                $dEndYearDay = (int)date('z', $d->end_date) + 1;
+
+                // Check if the current day falls within the item's date range
+                if ($dStartYearDay <= $yearDay && $dEndYearDay >= $yearDay) {
                     $days[$i]['items'][$d->id] = $d;
                 }
             }

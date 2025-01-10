@@ -16,7 +16,7 @@ use yii\widgets\Pjax;
         <?php foreach ($months as $month): ?>
             <div class="col-lg-2">
                 <a href="<?= Url::toRoute(['/calendarfrontend/default/detail', 'from' => $month['from'], 'to' => $month['to']]); ?>" class="border rounded mb-5 p-2 calendar-month">
-                <h2><?= strftime("%B", $month['from']); ?></h2>
+                <h2><?= Yii::$app->formatter->asDate($month['from'], 'LLLL'); ?></h2>
                 <?php if (empty($month['persons'])): ?>
                     <p class="text-muted">Keine Einträge</p>
                 <?php else: ?>
